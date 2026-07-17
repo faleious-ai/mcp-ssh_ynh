@@ -6,8 +6,17 @@ It does not fork or patch the upstream runtime. The package installs the exact n
 
 ## Install
 
+For a public repository:
+
 ```bash
 sudo yunohost app install https://github.com/faleious-ai/mcp-ssh_ynh
+```
+
+This repository is currently private. Until it is made public, clone it on the YunoHost server using GitHub credentials and install the local checkout:
+
+```bash
+git clone git@github.com:faleious-ai/mcp-ssh_ynh.git /root/mcp-ssh_ynh
+sudo yunohost app install /root/mcp-ssh_ynh
 ```
 
 During installation, provide a dedicated OpenSSH public key. Its private counterpart is used by the MCP client.
