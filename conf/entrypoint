@@ -1,0 +1,10 @@
+#!/bin/bash
+set -euo pipefail
+
+export HOME="__DATA_DIR__"
+export SSH_MANAGER_HOME="__DATA_DIR__/.ssh-manager"
+export SSH_ENV_PATH="__DATA_DIR__/.ssh-manager/.env"
+export PATH="__PATH_WITH_NODEJS__:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+
+cd "__INSTALL_DIR__"
+exec "__INSTALL_DIR__/node_modules/.bin/mcp-ssh-manager"

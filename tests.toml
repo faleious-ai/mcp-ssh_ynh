@@ -1,0 +1,6 @@
+#:schema https://raw.githubusercontent.com/YunoHost/apps/master/schemas/tests.v1.schema.json
+
+test_format = 1.0
+
+[default]
+    args.client_ssh_public_key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJ1YvbbrG7DLszSg4m0exGnA6eG952Raky76Io0Ev9pF ynh-test"

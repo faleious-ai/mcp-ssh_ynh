@@ -1,0 +1,22 @@
+name: Package lint
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  syntax:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate shell syntax
+        run: bash -n scripts/*
+      - name: Validate TOML
+        run: python - <<'PY'
+          import pathlib
+          import tomllib
+          for path in (pathlib.Path('manifest.toml'), pathlib.Path('tests.toml')):
+              with path.open('rb') as handle:
+                  tomllib.load(handle)
+              print(f'validated {path}')
+          PY

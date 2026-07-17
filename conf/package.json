@@ -1,0 +1,9 @@
+{
+  "name": "mcp-ssh-yunohost-runtime",
+  "private": true,
+  "version": "1.0.0",
+  "description": "YunoHost runtime wrapper for the upstream MCP SSH Manager package",
+  "dependencies": {
+    "mcp-ssh-manager": "__UPSTREAM_VERSION__"
+  }
+}

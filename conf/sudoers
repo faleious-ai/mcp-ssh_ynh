@@ -1,0 +1,2 @@
+Defaults:__APP__ !requiretty
+__APP__ ALL=(ALL:ALL) NOPASSWD: ALL

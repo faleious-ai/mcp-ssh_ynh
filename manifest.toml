@@ -1,0 +1,65 @@
+#:schema https://raw.githubusercontent.com/YunoHost/apps/master/schemas/manifest.v2.schema.json
+
+packaging_format = 2
+
+id = "mcp-ssh"
+name = "MCP SSH Manager"
+description.en = "Expose the full MCP SSH Manager catalog for this YunoHost server"
+description.fr = "Expose le catalogue complet de MCP SSH Manager pour ce serveur YunoHost"
+
+version = "3.7.0~ynh1"
+
+maintainers = ["faleious-ai"]
+
+[upstream]
+license = "MIT"
+website = "https://www.npmjs.com/package/mcp-ssh-manager"
+code = "https://github.com/bvisible/mcp-ssh-manager"
+
+[integration]
+yunohost = ">= 12.1.39"
+helpers_version = "2.1"
+architectures = "all"
+multi_instance = false
+ldap = "not_relevant"
+sso = "not_relevant"
+disk = "180M"
+ram.build = "350M"
+ram.runtime = "150M"
+
+[install]
+    [install.client_ssh_public_key]
+    ask.en = "SSH public key allowed to start the MCP server"
+    ask.fr = "Clé publique SSH autorisée à démarrer le serveur MCP"
+    help.en = "Paste one OpenSSH public key. This key will be restricted to the MCP stdio entrypoint and will not receive a normal shell."
+    help.fr = "Collez une clé publique OpenSSH. Cette clé sera limitée au point d'entrée MCP stdio et n'obtiendra pas de shell normal."
+    type = "string"
+
+[resources]
+    [resources.system_user]
+    allow_ssh = true
+    home = "/home/yunohost.app/__APP__"
+
+    [resources.install_dir]
+    dir = "/opt/yunohost/__APP__"
+
+    [resources.data_dir]
+    dir = "/home/yunohost.app/__APP__"
+
+    [resources.nodejs]
+    version = "22"
+
+    [resources.apt]
+    packages = [
+        "ca-certificates",
+        "git",
+        "openssh-client",
+        "openssh-server",
+        "rsync",
+        "sshpass",
+        "sudo",
+        "procps",
+        "iproute2",
+        "sysstat",
+        "net-tools",
+    ]

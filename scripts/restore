@@ -1,0 +1,28 @@
+#!/bin/bash
+
+source _common.sh
+source /usr/share/yunohost/helpers
+
+ynh_script_progression "Restoring MCP SSH Manager files..."
+
+ynh_restore "$install_dir"
+ynh_restore "$data_dir"
+ynh_restore "$sudoers_file"
+ynh_restore "$log_dir"
+
+chmod 0440 "$sudoers_file"
+chown root:root "$sudoers_file"
+visudo -cf "$sudoers_file" >/dev/null
+
+chown -R "$app:$app" "$install_dir" "$data_dir" "$log_dir"
+chmod 0700 "$data_dir/.ssh" "$data_dir/.ssh-manager"
+chmod 0600 "$data_dir/.ssh/authorized_keys" "$data_dir/.ssh/target_ed25519" "$data_dir/.ssh-manager/.env"
+chmod 0750 "$entrypoint"
+
+ssh_port="$(ynh_app_setting_get --key="ssh_port")"
+ssh_port="${ssh_port:-22}"
+
+ynh_script_progression "Testing the restored local SSH target..."
+self_test_local_ssh
+
+ynh_script_progression "Restoration of $app completed" --last

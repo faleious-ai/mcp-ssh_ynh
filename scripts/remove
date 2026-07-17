@@ -1,0 +1,10 @@
+#!/bin/bash
+
+source _common.sh
+source /usr/share/yunohost/helpers
+
+ynh_script_progression "Removing privileged MCP configuration..."
+rm -f "$sudoers_file"
+ynh_safe_rm "$log_dir"
+
+ynh_script_progression "Removal of $app completed" --last
