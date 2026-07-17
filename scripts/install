@@ -5,6 +5,7 @@ source /usr/share/yunohost/helpers
 
 ynh_script_progression "Validating the MCP client SSH key..."
 validate_client_public_key
+ynh_app_setting_set --key="client_ssh_public_key" --value="$client_ssh_public_key"
 
 ynh_script_progression "Installing MCP SSH Manager from the upstream npm package..." --weight=10
 install_upstream_package
