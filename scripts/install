@@ -1,19 +1,19 @@
 #!/bin/bash
-
 source _common.sh
 source /usr/share/yunohost/helpers
 
-ynh_script_progression "Validating the MCP client SSH key..."
-validate_client_public_key
-ynh_app_setting_set --key="client_ssh_public_key" --value="$client_ssh_public_key"
+ynh_app_setting_set --key=approver --value="$approver"
+ynh_script_progression "Installing the minimal MCP server..." --weight=10
+install_application_files
 
-ynh_script_progression "Installing MCP SSH Manager from the upstream npm package..." --weight=10
-install_upstream_package
+ynh_script_progression "Configuring loopback SSH and sudo..." --weight=3
+configure_internal_ssh
+configure_privileges
 
-ynh_script_progression "Configuring SSH transport, audit logging and unrestricted sudo..." --weight=5
-configure_mcp_runtime
+ynh_script_progression "Configuring HTTPS, OAuth and the approval interface..." --weight=5
+ynh_permission_update --permission=main --add="$approver"
+configure_runtime
 
-ynh_script_progression "Testing the local SSH target..." --weight=2
-self_test_local_ssh
-
+ynh_script_progression "Testing the MCP service..." --weight=2
+self_test
 ynh_script_progression "Installation of $app completed" --last
