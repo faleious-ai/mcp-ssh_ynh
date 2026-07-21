@@ -1,39 +1,37 @@
 #:schema https://raw.githubusercontent.com/YunoHost/apps/master/schemas/manifest.v2.schema.json
-
 packaging_format = 2
 
 id = "mcp-ssh"
-name = "MCP SSH Manager"
-description.en = "Expose the full MCP SSH Manager catalog for this YunoHost server"
-description.fr = "Expose le catalogue complet de MCP SSH Manager pour ce serveur YunoHost"
-
-version = "3.7.0~ynh1"
-
+name = "MCP SSH Approval"
+description.en = "Remote MCP with one SSH command tool and mandatory YunoHost approval"
+description.fr = "MCP distant avec un outil SSH et approbation YunoHost obligatoire"
+version = "4.0.0~ynh1"
 maintainers = ["faleious-ai"]
 
 [upstream]
 license = "MIT"
-website = "https://www.npmjs.com/package/mcp-ssh-manager"
-code = "https://github.com/bvisible/mcp-ssh-manager"
+code = "https://github.com/faleious-ai/mcp-ssh_ynh"
 
 [integration]
-yunohost = ">= 12.1.39"
+yunohost = ">= 12.1.40"
 helpers_version = "2.1"
 architectures = "all"
 multi_instance = false
 ldap = "not_relevant"
-sso = "not_relevant"
+sso = true
 disk = "180M"
 ram.build = "350M"
-ram.runtime = "150M"
+ram.runtime = "160M"
 
 [install]
-    [install.client_ssh_public_key]
-    ask.en = "SSH public key allowed to start the MCP server"
-    ask.fr = "Clé publique SSH autorisée à démarrer le serveur MCP"
-    help.en = "Paste one OpenSSH public key. This key will be restricted to the MCP stdio entrypoint and will not receive a normal shell."
-    help.fr = "Collez une clé publique OpenSSH. Cette clé sera limitée au point d'entrée MCP stdio et n'obtiendra pas de shell normal."
-    type = "string"
+    [install.domain]
+    type = "domain"
+    full_domain = true
+
+    [install.approver]
+    ask.en = "YunoHost user allowed to authorize OAuth clients and SSH commands"
+    ask.fr = "Utilisateur YunoHost autorisé à approuver les clients OAuth et les commandes SSH"
+    type = "user"
 
 [resources]
     [resources.system_user]
@@ -46,20 +44,24 @@ ram.runtime = "150M"
     [resources.data_dir]
     dir = "/home/yunohost.app/__APP__"
 
+    [resources.ports]
+    main.default = 8095
+
     [resources.nodejs]
     version = "22"
 
+    [resources.permissions]
+    main.url = "/approvals"
+    main.additional_urls = ["re:^/approvals/.*$", "/oauth/authorize"]
+    main.show_tile = true
+    main.auth_header = true
+
+    api.url = "/mcp"
+    api.additional_urls = ["/health", "/oauth/register", "/oauth/token", "/.well-known/oauth-protected-resource", "/.well-known/oauth-protected-resource/mcp", "/.well-known/oauth-authorization-server"]
+    api.allowed = "visitors"
+    api.show_tile = false
+    api.auth_header = false
+    api.protected = true
+
     [resources.apt]
-    packages = [
-        "ca-certificates",
-        "git",
-        "openssh-client",
-        "openssh-server",
-        "rsync",
-        "sshpass",
-        "sudo",
-        "procps",
-        "iproute2",
-        "sysstat",
-        "net-tools",
-    ]
+    packages = ["ca-certificates", "openssh-client", "openssh-server", "rsync", "sudo"]
